@@ -21,13 +21,6 @@ package org.isrsal.logging;
 
 import java.io.PrintWriter;
 
-/**
- * Created by IntelliJ IDEA.
- * User: zi
- * Date: 12/26/12
- * Time: 6:51 PM
- * To change this template use File | Settings | File Templates.
- */
 public class TeePrintWriter extends PrintWriter{
 
     PrintWriter branch;

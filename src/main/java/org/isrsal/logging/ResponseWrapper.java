@@ -30,13 +30,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-/**
-* Created by IntelliJ IDEA.
-* User: zi
-* Date: 12/28/12
-* Time: 10:25 AM
-* To change this template use File | Settings | File Templates.
-*/
 public class ResponseWrapper extends HttpServletResponseWrapper {
 
     private final ByteArrayOutputStream bos = new ByteArrayOutputStream();

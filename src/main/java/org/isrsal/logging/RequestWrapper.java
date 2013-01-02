@@ -28,13 +28,6 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-/**
-* Created by IntelliJ IDEA.
-* User: zi
-* Date: 12/28/12
-* Time: 10:24 AM
-* To change this template use File | Settings | File Templates.
-*/
 public class RequestWrapper extends HttpServletRequestWrapper {
 
     private final ByteArrayOutputStream bos = new ByteArrayOutputStream();
