@@ -4,7 +4,7 @@
 
     <groupId>org.isrsal</groupId>
     <artifactId>spring-mvc-logger</artifactId>
-    <version>0.1</version>
+    <version>0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Spring MVC logger</name>
@@ -98,7 +98,7 @@
 		<connection>scm:git:git://github.com/isrsal/spring-mvc-logger.git</connection>
 		<developerConnection>scm:git:git@github.com:isrsal/spring-mvc-logger.git</developerConnection>
 		<url>http://github.com/isrsal/spring-mvc-logger</url>
-	  <tag>spring-mvc-logger-0.1</tag>
+	  <tag>HEAD</tag>
   </scm>
 
     <distributionManagement>
