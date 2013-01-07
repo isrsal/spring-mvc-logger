@@ -4,7 +4,7 @@ spring-mvc-logger
 
 ```   
    <dependency>
-        <groupId>org.isrsal</groupId>
+        <groupId>com.github.isrsal</groupId>
         <artifactId>spring-mvc-logger</artifactId>
         <version>0.1</version>
     </dependency>
