@@ -4,13 +4,27 @@
 
     <groupId>com.github.isrsal</groupId>
     <artifactId>spring-mvc-logger</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Spring MVC logger</name>
 	<description>A small Java library to log http requests/responses when using Spring MVC</description>
 	<url>https://github.com/isrsal/spring-mvc-logger</url>
 	<inceptionYear>2012</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>GNU General Public License (GPL)</name>
+            <url>http://www.gnu.org/licenses/gpl.html</url>
+        </license>
+    </licenses>
+	<developers>
+		<developer>
+			<id>isrsal</id>
+			<name>Israel Zalmanov</name>
+			<email>isrsal@gmail.com</email>
+		</developer>
+	</developers>
 
     <dependencies>
         <dependency>
