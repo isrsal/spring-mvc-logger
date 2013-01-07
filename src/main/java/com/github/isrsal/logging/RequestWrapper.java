@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.isrsal.logging;
+package com.github.isrsal.logging;
 
 import org.apache.commons.io.input.TeeInputStream;
 import org.springframework.mock.web.DelegatingServletInputStream;
