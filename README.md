@@ -4,9 +4,9 @@ spring-mvc-logger
 
 ```   
    <dependency>
-        <groupId>org.isrsal</groupId>
+        <groupId>com.github.isrsal</groupId>
         <artifactId>spring-mvc-logger</artifactId>
-        <version>0.2</version>
+        <version>0.1</version>
     </dependency>
 ```
 
@@ -15,7 +15,7 @@ spring-mvc-logger
 ```
     <filter>
         <filter-name>loggingFilter</filter-name>
-        <filter-class>org.isrsal.logging.LoggingFilter</filter-class>
+        <filter-class>com.github.isrsal.logging.LoggingFilter</filter-class>
     </filter>
 
     <filter-mapping>
@@ -27,7 +27,7 @@ spring-mvc-logger
 3. Add to log4j.xml
 
 ```
-   <logger name="org.isrsal.logging.LoggingFilter">
+   <logger name="com.github.isrsal.logging.LoggingFilter">
       <level value="DEBUG"/>
    </logger>
 ```
