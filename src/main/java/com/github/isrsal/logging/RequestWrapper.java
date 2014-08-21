@@ -19,7 +19,6 @@
 package com.github.isrsal.logging;
 
 import org.apache.commons.io.input.TeeInputStream;
-import org.springframework.mock.web.DelegatingServletInputStream;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -40,7 +39,14 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 
     @Override
     public ServletInputStream getInputStream() throws IOException {
-        return new DelegatingServletInputStream(new TeeInputStream(super.getInputStream(), bos));
+        return new ServletInputStream() {
+            private TeeInputStream tee = new TeeInputStream(RequestWrapper.super.getInputStream(), bos);
+
+            @Override
+            public int read() throws IOException {
+                return tee.read();
+            }
+        };
     }
 
     public byte[] toByteArray(){

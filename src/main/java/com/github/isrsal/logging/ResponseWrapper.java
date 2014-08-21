@@ -19,8 +19,6 @@
 package com.github.isrsal.logging;
 
 import org.apache.commons.io.output.TeeOutputStream;
-import org.springframework.mock.web.DelegatingServletOutputStream;
-
 import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
@@ -47,7 +45,14 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 
     @Override
     public ServletOutputStream getOutputStream() throws IOException {
-        return new DelegatingServletOutputStream(new TeeOutputStream(super.getOutputStream(), bos));
+        return new ServletOutputStream() {
+            private TeeOutputStream tee = new TeeOutputStream(ResponseWrapper.super.getOutputStream(), bos);
+
+            @Override
+            public void write(int b) throws IOException {
+                tee.write(b);
+            }
+        };
     }
 
     @Override
