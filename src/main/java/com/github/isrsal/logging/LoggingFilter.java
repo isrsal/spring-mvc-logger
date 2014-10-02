@@ -18,15 +18,19 @@
 
 package com.github.isrsal.logging;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.filter.OncePerRequestFilter;
-
-import javax.servlet.*;
-import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.concurrent.atomic.AtomicLong;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 public class LoggingFilter extends OncePerRequestFilter {
 
@@ -36,7 +40,7 @@ public class LoggingFilter extends OncePerRequestFilter {
     private AtomicLong id = new AtomicLong(1);
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, final FilterChain filterChain) throws ServletException, IOException {
         if(logger.isDebugEnabled()){
             long requestId = id.incrementAndGet();
             request = new RequestWrapper(requestId, request);
@@ -55,7 +59,7 @@ public class LoggingFilter extends OncePerRequestFilter {
 
     }
 
-    private void logRequest(HttpServletRequest request) {
+    private void logRequest(final HttpServletRequest request) {
         StringBuilder msg = new StringBuilder();
         msg.append(REQUEST_PREFIX);
         if(request instanceof RequestWrapper){
@@ -65,9 +69,13 @@ public class LoggingFilter extends OncePerRequestFilter {
         if (session != null) {
             msg.append("session id=").append(session.getId()).append("; ");
         }
-        msg.append("content type=").append(request.getContentType()).append("; ");
+        if(request.getContentType() != null) {
+            msg.append("content type=").append(request.getContentType()).append("; ");
+        }
         msg.append("uri=").append(request.getRequestURI());
-        msg.append('?').append(request.getQueryString());
+        if(request.getQueryString() != null) {
+            msg.append('?').append(request.getQueryString());
+        }
 
         if(request instanceof RequestWrapper && !isMultipart(request)){
             RequestWrapper requestWrapper = (RequestWrapper) request;
@@ -83,11 +91,11 @@ public class LoggingFilter extends OncePerRequestFilter {
         logger.debug(msg.toString());
     }
 
-    private boolean isMultipart(HttpServletRequest request) {
+    private boolean isMultipart(final HttpServletRequest request) {
         return request.getContentType()!=null && request.getContentType().startsWith("multipart/form-data");
     }
 
-    private void logResponse(ResponseWrapper response) {
+    private void logResponse(final ResponseWrapper response) {
         StringBuilder msg = new StringBuilder();
         msg.append(RESPONSE_PREFIX);
         msg.append("request id=").append((response.getId()));
