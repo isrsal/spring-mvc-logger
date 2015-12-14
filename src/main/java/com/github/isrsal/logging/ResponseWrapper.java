@@ -21,6 +21,7 @@ package com.github.isrsal.logging;
 import org.apache.commons.io.output.TeeOutputStream;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletResponse;
+import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.ByteArrayOutputStream;
@@ -46,6 +47,16 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
     @Override
     public ServletOutputStream getOutputStream() throws IOException {
         return new ServletOutputStream() {
+            @Override
+            public boolean isReady() {
+                return false;
+            }
+
+            @Override
+            public void setWriteListener(WriteListener writeListener) {
+
+            }
+
             private TeeOutputStream tee = new TeeOutputStream(ResponseWrapper.super.getOutputStream(), bos);
 
             @Override
