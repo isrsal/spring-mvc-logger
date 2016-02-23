@@ -18,19 +18,18 @@
 
 package com.github.isrsal.logging;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.concurrent.atomic.AtomicLong;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.filter.OncePerRequestFilter;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class LoggingFilter extends OncePerRequestFilter {
 
@@ -41,7 +40,7 @@ public class LoggingFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, final FilterChain filterChain) throws ServletException, IOException {
-        if(logger.isDebugEnabled()){
+        if (logger.isDebugEnabled()) {
             long requestId = id.incrementAndGet();
             request = new RequestWrapper(requestId, request);
             response = new ResponseWrapper(requestId, response);
@@ -49,11 +48,10 @@ public class LoggingFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(request, response);
 //            response.flushBuffer();
-        }
-        finally {
-            if(logger.isDebugEnabled()){
+        } finally {
+            if (logger.isDebugEnabled()) {
                 logRequest(request);
-                logResponse((ResponseWrapper)response);
+                logResponse((ResponseWrapper) response);
             }
         }
 
@@ -62,22 +60,25 @@ public class LoggingFilter extends OncePerRequestFilter {
     private void logRequest(final HttpServletRequest request) {
         StringBuilder msg = new StringBuilder();
         msg.append(REQUEST_PREFIX);
-        if(request instanceof RequestWrapper){
-            msg.append("request id=").append(((RequestWrapper)request).getId()).append("; ");
+        if (request instanceof RequestWrapper) {
+            msg.append("request id=").append(((RequestWrapper) request).getId()).append("; ");
         }
         HttpSession session = request.getSession(false);
         if (session != null) {
             msg.append("session id=").append(session.getId()).append("; ");
         }
-        if(request.getContentType() != null) {
+        if (request.getMethod() != null) {
+            msg.append("method=").append(request.getMethod()).append("; ");
+        }
+        if (request.getContentType() != null) {
             msg.append("content type=").append(request.getContentType()).append("; ");
         }
         msg.append("uri=").append(request.getRequestURI());
-        if(request.getQueryString() != null) {
+        if (request.getQueryString() != null) {
             msg.append('?').append(request.getQueryString());
         }
 
-        if(request instanceof RequestWrapper && !isMultipart(request)){
+        if (request instanceof RequestWrapper && !isMultipart(request) && !isBinaryContent(request)) {
             RequestWrapper requestWrapper = (RequestWrapper) request;
             try {
                 String charEncoding = requestWrapper.getCharacterEncoding() != null ? requestWrapper.getCharacterEncoding() :
@@ -91,8 +92,15 @@ public class LoggingFilter extends OncePerRequestFilter {
         logger.debug(msg.toString());
     }
 
+    private boolean isBinaryContent(final HttpServletRequest request) {
+        if (request.getContentType() == null) {
+            return false;
+        }
+        return request.getContentType().startsWith("image") || request.getContentType().startsWith("video") || request.getContentType().startsWith("audio");
+    }
+
     private boolean isMultipart(final HttpServletRequest request) {
-        return request.getContentType()!=null && request.getContentType().startsWith("multipart/form-data");
+        return request.getContentType() != null && request.getContentType().startsWith("multipart/form-data");
     }
 
     private void logResponse(final ResponseWrapper response) {
