@@ -29,6 +29,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class LoggingFilter extends OncePerRequestFilter {
@@ -87,7 +89,14 @@ public class LoggingFilter extends OncePerRequestFilter {
             } catch (UnsupportedEncodingException e) {
                 logger.warn("Failed to parse request payload", e);
             }
-
+            
+            if(!requestWrapper.getParameterMap().isEmpty()) {
+                msg.append("; parameters=");
+                Map<String, String[]> parameterMap = requestWrapper.getParameterMap();
+                for (String key : parameterMap.keySet()) {
+                    msg.append(key + ":" + Arrays.toString(parameterMap.get(key))).append(";");
+                }
+            }
         }
         logger.debug(msg.toString());
     }
